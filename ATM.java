@@ -3,7 +3,7 @@ import java.util.HashMap;
 public class ATM {
     static HashMap<String, Account> users = new HashMap<String, Account>();
 
-    public static void openAccount(String name, String email, double amount) throws ATMError {
+    public static void openAccount(String name, String email, double amount) {
 
         try {
             if (users.get(name) != null) {
@@ -19,7 +19,7 @@ public class ATM {
 
     }
 
-    public static void closeAccount(String account) throws ATMError {
+    public static void closeAccount(String account) {
         try {
             if (users.get(account) == null) {
 
