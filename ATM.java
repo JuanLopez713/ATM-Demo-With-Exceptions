@@ -14,12 +14,14 @@ public class ATM {
             Account account = new Account(name, email, id, amount);
             users.put(name, account);
         } catch (ATMError e) {
-            e.userAccountAlreadyExistsException("openAccount()", name);
+            String methodName = "openAccount()";
+            e.userAccountAlreadyExistsException(methodName, name);
         }
 
     }
 
     public static void closeAccount(String account) {
+
         try {
             if (users.get(account) == null) {
 
@@ -31,11 +33,12 @@ public class ATM {
             }
             users.remove(account);
         } catch (ATMError e) {
+            String methodName = "closeAccount()";
             if (e.getErrorCode() == 1) {
-                e.userAccountMissingException("closeAccount()", account);
+                e.userAccountMissingException(methodName, account);
 
             } else {
-                e.accountBalanceMustBeZeroException("closeAccount()", account);
+                e.accountBalanceMustBeZeroException(methodName, account);
 
             }
 
@@ -44,6 +47,7 @@ public class ATM {
     }
 
     public static void checkBalance(String account) {
+
         try {
             if (users.get(account) == null) {
                 throw new ATMError();
@@ -51,7 +55,8 @@ public class ATM {
             System.out.println(users.get(account));
 
         } catch (ATMError e) {
-            e.userAccountMissingException("checkBalance()", account);
+            String methodName = "checkBalance()";
+            e.userAccountMissingException(methodName, account);
         }
 
     }
@@ -66,7 +71,8 @@ public class ATM {
 
             user.setAmount(user.getAmount() + deposit);
         } catch (ATMError e) {
-            e.userAccountMissingException("depositMoney()", account);
+            String methodName = "depositMoney()";
+            e.userAccountMissingException(methodName, account);
         }
 
     }
@@ -83,17 +89,18 @@ public class ATM {
             Account user = users.get(account);
             user.setAmount(user.getAmount() - withdrawAmount);
         } catch (ATMError e) {
+            String methodName = "withdrawMoney()";
             if (e.getErrorCode() == 1) {
-                e.userAccountMissingException("withdrawMoney()", account);
+                e.userAccountMissingException(methodName, account);
             } else {
-                e.insufficientFundsException("withdrawMoney()", account);
+                e.insufficientFundsException(methodName, account);
             }
         }
 
     }
 
     public static boolean transferMoney(String toAccount, String fromAccount, double transfer) {
-        String methodName = "transferMoney()";
+
         try {
             if (users.get(toAccount) == null) {
                 throw new ATMError(1);
@@ -106,6 +113,7 @@ public class ATM {
 
             return true;
         } catch (ATMError e) {
+            String methodName = "transferMoney()";
             if (e.getErrorCode() == 1) {
                 e.userAccountMissingException(methodName, toAccount);
 
