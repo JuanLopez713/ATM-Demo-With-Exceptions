@@ -1,6 +1,8 @@
+import java.io.FileNotFoundException;
+
 public class Tester {
     // Tester
-    public static void main(String[] args) throws ATMError {
+    public static void main(String[] args) throws ATMError, FileNotFoundException {
 
         ATM.openAccount("Juan", "123@gmail.com", 10.00);
         ATM.openAccount("Theiss", "456@gmail.com", 10.00);
@@ -26,5 +28,7 @@ public class Tester {
         ATM.withdrawMoney("Juan", 1000);
         ATM.transferMoney("Lopez", "Juan", 10);
         ATM.transferMoney("Theiss", "Juan", 110000);
+
+        ATM.audit();
     }
 }

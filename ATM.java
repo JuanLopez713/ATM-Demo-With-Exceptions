@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 
 public class ATM {
@@ -107,9 +110,11 @@ public class ATM {
             } else if (users.get(fromAccount) == null) {
                 throw new ATMError(2);
             }
-
-            depositMoney(toAccount, transfer);
+            if (users.get(fromAccount).getAmount() < transfer) {
+                throw new ATMError(3);
+            }
             withdrawMoney(fromAccount, transfer);
+            depositMoney(toAccount, transfer);
 
             return true;
         } catch (ATMError e) {
@@ -117,16 +122,34 @@ public class ATM {
             if (e.getErrorCode() == 1) {
                 e.userAccountMissingException(methodName, toAccount);
 
-            } else {
+            }
+            if (e.getErrorCode() == 2) {
                 e.userAccountMissingException(methodName, fromAccount);
 
+            } else {
+                e.insufficientFundsException(methodName, fromAccount);
             }
             return false;
         }
 
     }
 
-    public void audit() {
+    public static void audit() throws FileNotFoundException {
+
+        String str = "";
+
+        // Iterating HashMap through for loop
+        for (HashMap.Entry<String, Account> user : users.entrySet()) {
+            Account account = user.getValue();
+            str += account.toString() + "\n";
+        }
+        System.out.println(str);
+        // creates a file from file path parameter
+        File file = new File("AccountAudit.txt");
+        PrintWriter pw = new PrintWriter(file);
+        pw.write(str);
+        pw.close();
 
     }
+
 }
