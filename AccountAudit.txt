@@ -1,2 +1,1 @@
-Account [name: Theiss, email: 456@gmail.com, id: 1234, amount: $20.00]
-Account [name: Juan, email: 123@gmail.com, id: 1234, amount: $30.00]
+[{"name": "Theiss","email": "456@gmail.com","id": "1234","amount": 20.76},{"name": "Juan","email": "123@gmail.com","id": "1234","amount": 30.24}]
