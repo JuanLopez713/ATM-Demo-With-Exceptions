@@ -1,7 +1,13 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.HashMap;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class ATM {
     static HashMap<String, Account> users = new HashMap<String, Account>();
@@ -136,19 +142,54 @@ public class ATM {
 
     public static void audit() throws FileNotFoundException {
 
-        String str = "";
+        String str = "[";
 
         // Iterating HashMap through for loop
         for (HashMap.Entry<String, Account> user : users.entrySet()) {
             Account account = user.getValue();
-            str += account.toString() + "\n";
+            str += "{";
+            str += "\"name\": \"" + account.getName() + "\",";
+            str += "\"email\": \"" + account.getEmail() + "\",";
+            str += "\"id\": \"" + account.getId() + "\",";
+            str += "\"amount\": " + account.getAmount() + "";
+            str += "},";
+
         }
+        str = str.substring(0, str.length() - 1) + "]";
         System.out.println(str);
         // creates a file from file path parameter
         File file = new File("AccountAudit.txt");
         PrintWriter pw = new PrintWriter(file);
         pw.write(str);
         pw.close();
+
+    }
+
+    public static void bootup() throws FileNotFoundException, IOException {
+        BufferedReader reader = new BufferedReader(new FileReader("AccountAudit.txt"));
+        StringBuilder string = new StringBuilder();
+        while (reader.ready()) {
+            string.append((char) reader.read());
+        }
+        reader.close();
+        String str = string.toString();
+        JSONArray jsonArray = new JSONArray(str);
+        System.out.println("HELLO");
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject object = jsonArray.getJSONObject(i);
+            System.out.println(object);
+            String name = object.getString("name");
+
+            String id = object.getString("id");
+
+            DecimalFormat df = new DecimalFormat("#.##");
+            double amount = Double.valueOf(df.format(object.getDouble("amount")));
+            String email = object.getString("email");
+            // System.out.println(jsonArray);
+
+            users.put(name, new Account(name, email, id, amount));
+
+        }
 
     }
 
